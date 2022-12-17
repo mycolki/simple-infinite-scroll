@@ -2,6 +2,7 @@ import { Route, BrowserRouter, Routes } from 'react-router-dom';
 import styled from 'styled-components';
 
 import Header from './components/Header';
+import IssueDetail from './components/IssueDetail';
 import IssueList from './components/IssueList';
 
 function App() {
@@ -11,6 +12,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<IssueList />} />
+          <Route path="/detail/:id" element={<IssueDetail />} />
         </Routes>
       </BrowserRouter>
     </AppContainer>

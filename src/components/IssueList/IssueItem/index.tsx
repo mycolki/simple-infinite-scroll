@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
+import { Link } from 'react-router-dom';
 import { Issue } from '../../../types';
 
 type Props = {
@@ -9,7 +10,9 @@ function IssueItem({ issue }: Props) {
   const { number, title, creator, created_at, comments } = issue;
   return (
     <div>
-      <div>#{number}</div>
+      <Link to={`/detail/${number}`}>
+        <div>#{number}</div>
+      </Link>
       <div>제목: {title}</div>
       <div>작성자: {creator}</div>
       <div>작성일: {created_at}</div>
