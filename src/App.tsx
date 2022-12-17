@@ -2,7 +2,7 @@ import { Route, BrowserRouter, Routes } from 'react-router-dom';
 import styled from 'styled-components';
 
 import Header from './components/Header';
-import Issue from './components/Issue';
+import IssueList from './components/IssueList';
 
 function App() {
   return (
@@ -10,7 +10,7 @@ function App() {
       <Header />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Issue />} />
+          <Route path="/" element={<IssueList />} />
         </Routes>
       </BrowserRouter>
     </AppContainer>
