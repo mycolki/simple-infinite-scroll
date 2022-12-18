@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
+import useIntersect from '../../hooks/useIntersect';
 
 import { Issue } from '../../types';
 import IssueItem from './IssueItem';
@@ -9,9 +10,7 @@ const token = process.env.REACT_APP_API_TOKEN;
 function IssueList() {
   const [issueData, setIssueData] = useState<Issue[]>([]);
   const [page, setPage] = useState(1);
-  const [isFetching, setIsFetching] = useState(true);
-
-  const ref = useRef<HTMLDivElement | null>(null);
+  const [isFetching, setIsFetching] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -28,35 +27,21 @@ function IssueList() {
       );
 
       const data = await response.json();
-
       setIssueData(prevData => [...prevData, ...data]);
       setIsFetching(false);
     };
 
+    setIsFetching(true);
     fetchData();
   }, [page]);
 
-  useEffect(() => {
-    if (!ref.current) return;
-
-    const intersectionObserver = new IntersectionObserver(
-      (entries, observer) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting && !isFetching) {
-            observer.unobserve(entry.target);
-            setPage(prevPage => prevPage + 1);
-          }
-        });
-      },
-      { rootMargin: '0px 0px 400px 0px' }
-    );
-
-    intersectionObserver.observe(ref.current);
-
-    return () => {
-      intersectionObserver.disconnect();
-    };
+  const fetchNextData = useCallback(() => {
+    if (!isFetching) {
+      setPage(prevPage => prevPage + 1);
+    }
   }, [isFetching]);
+
+  const ref = useIntersect(fetchNextData, { rootMargin: '0px 0px 400px 0px' });
 
   return (
     <StyledList>
